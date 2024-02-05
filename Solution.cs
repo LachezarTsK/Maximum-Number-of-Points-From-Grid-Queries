@@ -1,7 +1,7 @@
 
 using System;
 using System.Collections.Generic;
-using customDataStructures;
+using CustomDataStructures;
 
 public class Solution
 {
@@ -23,13 +23,13 @@ public class Solution
         this.rows = matrix.Length;
         this.columns = matrix[0].Length;
 
-        return calculatePointsForAllQueries(originalQueries);
+        return CalculatePointsForAllQueries(originalQueries);
     }
 
-    private int[] calculatePointsForAllQueries(int[] originalQueries)
+    private int[] CalculatePointsForAllQueries(int[] originalQueries)
     {
         Position start = new Position(0, 0, matrix[0][0]);
-        Query[] queriesSortedByValueAscending = createQueriesSortedByValueAscending(originalQueries);
+        Query[] queriesSortedByValueAscending = CreateQueriesSortedByValueAscending(originalQueries);
 
         Comparer<int> comparatorAscendingValue = Comparer<int>.Create((x, y) => x.CompareTo(y));
         minHeapForValue = new PriorityQueue<Position, int>(comparatorAscendingValue);
@@ -43,13 +43,13 @@ public class Solution
 
         foreach (Query query in queriesSortedByValueAscending)
         {
-            maxPoints[query.originalIndex] = calculatePointsForCurrentQuery(query.value, pointsPreviousQuery);
+            maxPoints[query.originalIndex] = CalculatePointsForCurrentQuery(query.value, pointsPreviousQuery);
             pointsPreviousQuery = maxPoints[query.originalIndex];
         }
         return maxPoints;
     }
 
-    private int calculatePointsForCurrentQuery(int currentQueryValue, int pointsPreviousQuery)
+    private int CalculatePointsForCurrentQuery(int currentQueryValue, int pointsPreviousQuery)
     {
         int pointsCurrentQuery = pointsPreviousQuery;
 
@@ -63,7 +63,7 @@ public class Solution
                 int nextRow = current.row + move[0];
                 int nextColumn = current.column + move[1];
 
-                if (isInMatrix(nextRow, nextColumn) && !visitedForAllQueries[nextRow, nextColumn])
+                if (IsInMatrix(nextRow, nextColumn) && !visitedForAllQueries[nextRow, nextColumn])
                 {
                     Position position = new Position(nextRow, nextColumn, matrix[nextRow][nextColumn]);
                     minHeapForValue.Enqueue(position, position.value);
@@ -74,7 +74,7 @@ public class Solution
         return pointsCurrentQuery;
     }
 
-    private Query[] createQueriesSortedByValueAscending(int[] originalQueries)
+    private Query[] CreateQueriesSortedByValueAscending(int[] originalQueries)
     {
         Query[] queriesSortedByValueAscending = new Query[originalQueries.Length];
 
@@ -88,13 +88,13 @@ public class Solution
         return queriesSortedByValueAscending;
     }
 
-    private bool isInMatrix(int row, int column)
+    private bool IsInMatrix(int row, int column)
     {
         return row >= 0 && row < rows && column >= 0 && column < columns;
     }
 }
 
-namespace customDataStructures
+namespace CustomDataStructures
 {
     struct Query
     {
